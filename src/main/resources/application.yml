@@ -1,0 +1,43 @@
+zuul:
+  #Service will be mapped under the /api URI
+  prefix: /api
+  host:
+          connect-timeout-millis: 3000
+          socket-timeout-millis: 3000
+  routes:
+    hello-server:
+      path: /server/**
+      url: http://localhost:8071
+#      serviceId: HELLO-SERVER
+    hello-client:
+      path: /client/**
+      serviceId: hello-client
+    ssh-znb:
+      path: /ssh/**
+      serviceId: eza_consumer_test
+    dc-consumer:
+      path: /dc/**
+      serviceId: dc_consumer
+
+ribbon:
+  ReadTimeout: 3000
+  ConnectTimeout: 3000
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    registerWithEureka: true
+    fetchRegistry: true
+  instance:
+    hostname: zuul
+    instance:
+          instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
+
+server:
+  port: 8079
+
+spring:
+  application:
+    name: zuul-service
